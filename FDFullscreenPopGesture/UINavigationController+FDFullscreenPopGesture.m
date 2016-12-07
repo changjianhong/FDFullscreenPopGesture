@@ -182,6 +182,9 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             [strongSelf setNavigationBarHidden:viewController.fd_prefersNavigationBarHidden animated:animated];
+          UIColor *color = viewController.fd_navigationBarTintColor;
+          color = color ? : [UIColor whiteColor];
+          [strongSelf.navigationBar setBarTintColor:color];
         }
     };
     
@@ -261,6 +264,16 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     objc_setAssociatedObject(self, @selector(fd_prefersNavigationBarHidden), @(hidden), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (UIColor *)fd_navigationBarTintColor
+{
+  return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setFd_navigationBarTintColor:(UIColor *)color
+{
+  objc_setAssociatedObject(self, @selector(fd_navigationBarTintColor), color, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 
 - (CGFloat)fd_interactivePopMaxAllowedInitialDistanceToLeftEdge
 {
@@ -276,5 +289,7 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     SEL key = @selector(fd_interactivePopMaxAllowedInitialDistanceToLeftEdge);
     objc_setAssociatedObject(self, key, @(MAX(0, distance)), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
+
+
 
 @end
